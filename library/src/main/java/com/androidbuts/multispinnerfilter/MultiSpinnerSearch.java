@@ -45,7 +45,7 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 	private String emptyTitle = "Not Found!";
 	private String searchHint = "Type to search";
 	private String clearText = "Clear All";
-	private String selectAllText = android.R.string.selectAll;
+	private String selectAllText = null;
 	private boolean colorSeparation = false;
 
 	private boolean isShowClearAllButton = false;
@@ -242,14 +242,20 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
         Added Select all Dialog Button.
          */
 		if (isShowSelectAllButton && limit == -1) {
-			builder.setNeutralButton(selectAllText, (dialog, which) -> {
+			DialogInterface.OnClickListener listener = (dialog, which) -> {
 				for (int i = 0; i < adapter.arrayList.size(); i++) {
 					adapter.arrayList.get(i).setSelected(true);
 				}
 				adapter.notifyDataSetChanged();
-				// To call onCancel listner and set title of selected items.
+				// To call onCancel listener and set title of selected items.
 				dialog.cancel();
-			});
+			};
+
+			if(selectAllText != null) {
+				builder.setNeutralButton(selectAllText, listener);
+			} else {
+				builder.setNeutralButton(android.R.string.selectAll, listener);
+			}
 		}
 
 		builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
