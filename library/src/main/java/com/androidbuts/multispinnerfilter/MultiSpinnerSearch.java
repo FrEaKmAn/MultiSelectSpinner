@@ -45,8 +45,10 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 	private String emptyTitle = "Not Found!";
 	private String searchHint = "Type to search";
 	private String clearText = "Clear All";
+	private String selectAllText = android.R.string.selectAll;
 	private boolean colorSeparation = false;
 
+	private boolean isShowClearAllButton = false;
 	private boolean isShowSelectAllButton = false;
 
 	private MultiSpinnerListener listener;
@@ -116,6 +118,10 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 
 	public void setClearText(String clearText){
 		this.clearText = clearText;
+	}
+
+	public void setSelectAllText(String selectAllText){
+		this.selectAllText = selectAllText;
 	}
 
 	public void setLimit(int limit, LimitExceedListener listener) {
@@ -236,7 +242,7 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
         Added Select all Dialog Button.
          */
 		if (isShowSelectAllButton && limit == -1) {
-			builder.setNeutralButton(android.R.string.selectAll, (dialog, which) -> {
+			builder.setNeutralButton(selectAllText, (dialog, which) -> {
 				for (int i = 0; i < adapter.arrayList.size(); i++) {
 					adapter.arrayList.get(i).setSelected(true);
 				}
@@ -251,14 +257,16 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 			dialog.cancel();
 		});
 
-		builder.setNegativeButton(clearText, (dialog, which) -> {
-			//Log.i(TAG, " ITEMS : " + items.size());
-			for (int i = 0; i < adapter.arrayList.size(); i++) {
-				adapter.arrayList.get(i).setSelected(false);
-			}
-			adapter.notifyDataSetChanged();
-			dialog.cancel();
-		});
+		if(isShowClearAllButton) {
+			builder.setNegativeButton(clearText, (dialog, which) -> {
+				//Log.i(TAG, " ITEMS : " + items.size());
+				for (int i = 0; i < adapter.arrayList.size(); i++) {
+					adapter.arrayList.get(i).setSelected(false);
+				}
+				adapter.notifyDataSetChanged();
+				dialog.cancel();
+			});
+		}
 
 		builder.setOnCancelListener(this);
 		ad = builder.show();
@@ -300,6 +308,14 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 
 	public void setShowSelectAllButton(boolean showSelectAllButton) {
 		isShowSelectAllButton = showSelectAllButton;
+	}
+
+	public boolean isShowClearAllButton() {
+		return isShowClearAllButton;
+	}
+
+	public void isShowClearAllButton(boolean showClearAllButton) {
+		isShowClearAllButton = showClearAllButton;
 	}
 
 	public interface LimitExceedListener {
