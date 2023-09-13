@@ -175,8 +175,9 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 		ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(getContext(), R.layout.textview_for_spinner, new String[]{spinnerText});
 		setAdapter(adapterSpinner);
 
-		if (adapter != null)
+		if (adapter != null) {
 			adapter.notifyDataSetChanged();
+		}
 
         listener.onItemsSelected(selectedData);
         onDetachedFromWindow();
@@ -320,7 +321,7 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 		return isShowClearAllButton;
 	}
 
-	public void isShowClearAllButton(boolean showClearAllButton) {
+	public void setShowClearAllButton(boolean showClearAllButton) {
 		isShowClearAllButton = showClearAllButton;
 	}
 
